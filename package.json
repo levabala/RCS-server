@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec 'ts-node' ./src/server.ts",
     "start": "ts-node --fast ./src/server.ts",
-    "gitUpdate": "git add ./ & git commit -m 'updates' & git push origin master",
-    "patch": "npm run gitUpdate & npm version patch & npm publish"
+    "patch": "git add ./ & git commit -m 'updates' & git push origin master & npm version patch & npm publish"
   },
   "repository": {
     "type": "git",
