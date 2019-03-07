@@ -1,0 +1,4 @@
+node_modules
+.tscache
+coverage
+.nyc_output
