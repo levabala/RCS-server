@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 import * as httpMock from 'node-mocks-http';
 
-import { BodyType, RequestType } from './network';
 import { routerFunction } from './router';
+import { BodyType, RequestType } from './types';
 
 describe('Requests', () => {
   describe('FileTree request', () => {
