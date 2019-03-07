@@ -2,7 +2,7 @@
   "name": "rcs-server",
   "version": "1.0.1",
   "description": "",
-  "main": "server.ts",
+  "main": "index.ts",
   "scripts": {
     "dev": "nodemon --exec 'ts-node' ./src/server.ts",
     "start": "ts-node --fast ./src/server.ts",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/levabala/RCS-server#readme",
   "files": [
+    "index.js",
     "/src/types.ts"
   ],
   "devDependencies": {
