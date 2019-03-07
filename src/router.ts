@@ -16,7 +16,7 @@ const routes = {
   ): IRouteOutput<RequestType.FileTree> => {
     const { path } = query as BodyType<RequestType.FileTree>;
     const files = fs.readdirSync(path).map(f => {
-      const stat = fs.statSync(f);
+      const stat = fs.statSync(path + '/' + f);
       return { name: f, isDirectory: stat.isDirectory(), size: stat.size };
     });
     return { data: files, code: 200 };
