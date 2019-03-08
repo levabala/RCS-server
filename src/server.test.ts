@@ -7,7 +7,7 @@ import { BodyType, RequestType } from './types';
 
 describe('Requests', () => {
   describe('FileTree request', () => {
-    it('returns valid file tree', () => {
+    it('returns valid file tree', async () => {
       const query: BodyType<RequestType.FileTree> = {
         path: './',
       };
@@ -22,7 +22,7 @@ describe('Requests', () => {
 
       const res = httpMock.createResponse();
 
-      routerFunction(req, res);
+      await routerFunction(req, res);
 
       const rawData = res._getData();
       const data = JSON.parse(rawData);

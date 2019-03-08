@@ -2,7 +2,9 @@ import * as fs from 'fs';
 import * as http from 'http';
 import { ParsedUrlQuery } from 'querystring';
 import * as url from 'url';
+import { promisify } from 'util';
 
+import processors from './processors';
 import { BodyType, RequestType, ResponseType } from './types';
 
 interface IRouteOutput<T extends RequestType> {
@@ -10,20 +12,40 @@ interface IRouteOutput<T extends RequestType> {
   code: number;
 }
 
+const readdirAsync = promisify(fs.readdir);
+const statAsync = promisify(fs.stat);
+
 const routes = {
-  ['/' + RequestType.FileTree]: (
+  ['/' + RequestType.FileTree]: async (
     query: ParsedUrlQuery,
-  ): IRouteOutput<RequestType.FileTree> => {
+  ): Promise<IRouteOutput<RequestType.FileTree>> => {
     const { path } = query as BodyType<RequestType.FileTree>;
-    const files = fs.readdirSync(path).map(f => {
-      const stat = fs.statSync(path + '/' + f);
-      return { name: f, isDirectory: stat.isDirectory(), size: stat.size };
-    });
+    const pr = readdirAsync(path).then(files =>
+      Promise.all(
+        files.map(async f => {
+          const stat = await statAsync(`${path}/${f}`);
+          return { name: f, isDirectory: stat.isDirectory(), size: stat.size };
+        }),
+      ),
+    );
+
+    const files = await pr;
+
     return { data: files, code: 200 };
+  },
+  ['/' + RequestType.ApplyProcessor]: async (
+    query: ParsedUrlQuery,
+  ): Promise<IRouteOutput<RequestType.ApplyProcessor>> => {
+    const { processorName, args } = query as BodyType<
+      RequestType.ApplyProcessor
+    >;
+    const processor = processors[processorName];
+
+    return processor.process(args).then(res => ({ data: res, code: 200 }));
   },
 };
 
-export function routerFunction(
+export async function routerFunction(
   req: http.IncomingMessage,
   res: http.ServerResponse,
 ) {
@@ -34,7 +56,7 @@ export function routerFunction(
 
   if (route)
     try {
-      const { code, data } = route(q.query);
+      const { code, data } = await route(q.query);
       res.writeHead(code, { 'Content-Type': 'application/json ' });
       res.write(JSON.stringify(data));
     } catch (e) {
