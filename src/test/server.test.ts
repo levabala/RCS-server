@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as fs from 'fs';
 import * as httpMock from 'node-mocks-http';
 
-import { routerFunction } from './router';
-import { BodyType, RequestType } from './types';
+import { routerFunction } from '../router';
+import { BodyType, RequestType } from '../types';
 
 describe('Requests', () => {
   describe('FileTree request', () => {
@@ -27,8 +27,11 @@ describe('Requests', () => {
       const rawData = res._getData();
       const data = JSON.parse(rawData);
 
-      const files = fs.readdirSync(query.path);
-      expect(data.join()).to.equal(files.join());
+      const testData = fs.readdirSync(query.path).map(f => {
+        const stat = fs.statSync(query.path + '/' + f);
+        return { name: f, isDirectory: stat.isDirectory(), size: stat.size };
+      });
+      expect(data.join()).to.equal(testData.join());
     });
   });
 });

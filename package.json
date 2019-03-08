@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon --exec 'ts-node' ./src/server.ts",
     "start": "ts-node --fast ./src/server.ts",
-    "update": "git add ./ & git commit -m 'updates' & git push origin master & npm version patch & npm publish"
+    "update": "git add ./ & git commit -m 'updates' & git push origin master & npm version patch & npm publish",
+    "coverage": "serve coverage"
   },
   "repository": {
     "type": "git",
@@ -28,15 +29,33 @@
     "@types/mocha": "^5.2.6",
     "@types/node": "^11.10.4",
     "chai": "^4.2.0",
+    "directory-tree": "^2.2.1",
     "mocha": "^6.0.2",
     "node-mocks-http": "^1.7.3",
     "nodemon": "^1.18.10",
+    "source-map-support": "^0.5.10",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
     "await-fs": "^1.0.0",
     "fs-extra": "^7.0.1",
-    "http": "0.0.0"
+    "http": "0.0.0",
+    "levabala_directory-tree": "^2.2.1"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "**/*.test.ts",
+      "coverage"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
   }
 }

@@ -1,0 +1,15 @@
+{
+  "mocha.options": { "compilers": "ts-node/register" },
+  "mocha.requires": ["ts-node/register"],
+  "mocha.files.glob": "src/test/*.test.ts",
+  "mocha.coverage": {
+    "enable": true,
+    "decoration": true,
+    "runWithInterval": false,
+    "autoUpdateInterval": 20000,
+    "activeOnStart": true,
+    "runAfterTest": false,
+    "runCoverageAfterFileSave": true,
+    "reporters": []
+  }
+}

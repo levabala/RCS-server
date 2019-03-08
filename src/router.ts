@@ -36,12 +36,12 @@ const routes = {
   ['/' + RequestType.ExecuteMethod]: async (
     query: ParsedUrlQuery,
   ): Promise<IRouteOutput<RequestType.ExecuteMethod>> => {
-    const { processorName: methodName, args } = query as BodyType<
+    const { methodName: methodName, args } = query as BodyType<
       RequestType.ExecuteMethod
     >;
     const method = methods[methodName];
 
-    if (!method) throw new Error('no such processor');
+    if (!method) throw new Error('no such method');
 
     return method.execute(args).then(res => ({ data: res, code: 200 }));
   },
@@ -66,7 +66,7 @@ export async function routerFunction(
       res.statusMessage = (e as Error).message;
       res.statusCode = 400;
     }
-  else res.write('RCS Server');
+  else res.write(JSON.stringify('RCS Server'));
 
   res.end();
 }

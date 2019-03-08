@@ -1,11 +1,13 @@
 export enum RequestType {
   FileTree = 'fileTree',
   ExecuteMethod = 'executeMethod',
+  Help = 'help',
 }
 
 interface bodyTypes {
   [RequestType.FileTree]: { path: string };
-  [RequestType.ExecuteMethod]: { processorName: string; args: string[] };
+  [RequestType.ExecuteMethod]: { methodName: string; args: string[] };
+  [RequestType.Help]: { methodName: string; args: string[] };
 }
 
 interface responseTypes {
@@ -15,6 +17,7 @@ interface responseTypes {
     size: number;
   }>;
   [RequestType.ExecuteMethod]: string;
+  [RequestType.Help]: string;
 }
 
 export type BodyType<T extends RequestType> = bodyTypes[T];
