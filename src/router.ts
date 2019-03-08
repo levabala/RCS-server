@@ -4,7 +4,7 @@ import { ParsedUrlQuery } from 'querystring';
 import * as url from 'url';
 import { promisify } from 'util';
 
-import processors from './processors';
+import processors from './methods';
 import { BodyType, RequestType, ResponseType } from './types';
 
 interface IRouteOutput<T extends RequestType> {
@@ -41,7 +41,9 @@ const routes = {
     >;
     const processor = processors[processorName];
 
-    return processor.process(args).then(res => ({ data: res, code: 200 }));
+    if (!processor) throw new Error('no such processor');
+
+    return processor.execute(args).then(res => ({ data: res, code: 200 }));
   },
 };
 
@@ -49,8 +51,9 @@ export async function routerFunction(
   req: http.IncomingMessage,
   res: http.ServerResponse,
 ) {
-  console.log('request', req.url);
   const q = url.parse(req.url, true);
+
+  console.log('request:', q.pathname, 'query:', q.query);
 
   const route = routes[q.pathname];
 
@@ -60,9 +63,8 @@ export async function routerFunction(
       res.writeHead(code, { 'Content-Type': 'application/json ' });
       res.write(JSON.stringify(data));
     } catch (e) {
-      console.log(e);
-      res.writeHead(404, { 'Content-Type': 'application/json ' });
-      res.write(JSON.stringify((e as Error).message));
+      res.statusMessage = (e as Error).message;
+      res.statusCode = 400;
     }
   else res.write('RCS Server');
 
