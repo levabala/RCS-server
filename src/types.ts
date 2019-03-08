@@ -1,6 +1,6 @@
 export enum RequestType {
   FileTree = 'fileTree',
-  ExecuteMethod = 'applyProcessor',
+  ExecuteMethod = 'executeMethod',
 }
 
 interface bodyTypes {

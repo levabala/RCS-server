@@ -4,7 +4,7 @@ import { ParsedUrlQuery } from 'querystring';
 import * as url from 'url';
 import { promisify } from 'util';
 
-import processors from './methods';
+import methods from './methods';
 import { BodyType, RequestType, ResponseType } from './types';
 
 interface IRouteOutput<T extends RequestType> {
@@ -33,17 +33,17 @@ const routes = {
 
     return { data: files, code: 200 };
   },
-  ['/' + RequestType.ApplyProcessor]: async (
+  ['/' + RequestType.ExecuteMethod]: async (
     query: ParsedUrlQuery,
-  ): Promise<IRouteOutput<RequestType.ApplyProcessor>> => {
-    const { processorName, args } = query as BodyType<
-      RequestType.ApplyProcessor
+  ): Promise<IRouteOutput<RequestType.ExecuteMethod>> => {
+    const { processorName: methodName, args } = query as BodyType<
+      RequestType.ExecuteMethod
     >;
-    const processor = processors[processorName];
+    const method = methods[methodName];
 
-    if (!processor) throw new Error('no such processor');
+    if (!method) throw new Error('no such processor');
 
-    return processor.execute(args).then(res => ({ data: res, code: 200 }));
+    return method.execute(args).then(res => ({ data: res, code: 200 }));
   },
 };
 
