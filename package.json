@@ -8,7 +8,8 @@
     "start": "ts-node --fast ./src/server.ts",
     "gitup": "git add ./ & git commit -m 'updates' & git push origin master",
     "update": "git add ./ & git commit -m 'updates' & git push origin master & npm version patch & npm publish",
-    "coverage": "serve coverage"
+    "coverage": "serve coverage",
+    "updateLibs": "npm install --save levabala_directory-tree@latest"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,7 @@
     "await-fs": "^1.0.0",
     "fs-extra": "^7.0.1",
     "http": "0.0.0",
-    "levabala_directory-tree": "^2.2.1"
+    "levabala_directory-tree": "^2.2.4"
   },
   "nyc": {
     "extension": [

@@ -1,11 +1,12 @@
-import { Method } from 'src/types';
+import { Command } from 'src/command';
 
-import methods from '.';
+import methods from '../methods';
 
-const showMethods: Method = {
-  execute: async () => Object.keys(methods).join('\n'),
-  help: 'just execute it without any args',
-  name: 'showMethods',
-};
+type Req = [];
+type Res = { methodNames: string[] };
+
+const showMethods: Command<Req, Res> = async args => ({
+  methodNames: Object.keys(methods),
+});
 
 export default showMethods;

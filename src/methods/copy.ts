@@ -1,24 +1,23 @@
 import * as fs from 'fs';
-import { Method } from 'src/types';
+import { Command } from 'src/command';
 import { promisify } from 'util';
 
 const copyFileAsync = promisify(fs.copyFile);
 
-const copy: Method = {
-  execute: args => {
-    let targetPath, outputPath;
-    try {
-      [targetPath, outputPath] = args;
-    } catch (e) {
-      throw new Error('invalid args');
-    }
+type Req = [string, string];
+type Res = { message: string };
 
-    return copyFileAsync(targetPath, outputPath)
-      .then(() => 'done')
-      .catch(e => e.message);
-  },
-  name: 'copy',
-  help: 'input args: [targetPath] [outputPath]',
+const copy: Command<Req, Res> = args => {
+  let targetPath, outputPath;
+  try {
+    [targetPath, outputPath] = args;
+  } catch (e) {
+    throw new Error('invalid args');
+  }
+
+  return copyFileAsync(targetPath, outputPath)
+    .then(() => ({ message: 'done' }))
+    .catch((e: Error) => ({ message: e.message }));
 };
 
 export default copy;
