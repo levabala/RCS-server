@@ -4,10 +4,10 @@ import { promisify } from 'util';
 
 const copyFileAsync = promisify(fs.copyFile);
 
-type Req = [string, string];
-type Res = { message: string };
+export type CopyRequest = [string, string];
+export type CopyResponse = { message: string };
 
-const copy: Command<Req, Res> = args => {
+const copy: Command<CopyRequest, CopyResponse> = args => {
   let targetPath, outputPath;
   try {
     [targetPath, outputPath] = args;

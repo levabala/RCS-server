@@ -2,10 +2,13 @@ import { Command } from 'src/command';
 
 import methods from '../methods';
 
-type Req = [];
-type Res = { methodNames: string[] };
+export type ShowMethodsRequest = [];
+export type ShowMethodsResponse = { methodNames: string[] };
 
-const showMethods: Command<Req, Res> = async args => ({
+const showMethods: Command<
+  ShowMethodsRequest,
+  ShowMethodsResponse
+> = async args => ({
   methodNames: Object.keys(methods),
 });
 

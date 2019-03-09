@@ -10,10 +10,10 @@ export interface DirectoryTree {
   extension?: string;
 }
 
-type Req = [string, number?];
-type Res = DirectoryTree;
+export type FileTreeRequest = [string, number?];
+export type FileTreeResponse = DirectoryTree;
 
-const fileTree: Command<Req, Res> = args => {
+const fileTree: Command<FileTreeRequest, FileTreeResponse> = args => {
   let targetPath, depth;
   try {
     [targetPath, depth = Infinity] = args;
