@@ -2,7 +2,7 @@ import { Command } from 'src/command';
 
 import methods from '../methods';
 
-export type ShowMethodsRequest = [];
+export type ShowMethodsRequest = any[];
 export type ShowMethodsResponse = { methodNames: string[] };
 
 const showMethods: Command<

@@ -31,7 +31,10 @@ export async function routerFunction(
       res.statusMessage = (e as Error).message;
       res.statusCode = 400;
     }
-  else res.write(JSON.stringify('RCS Server'));
+  else {
+    res.statusMessage = 'no such command';
+    res.statusCode = 400;
+  }
 
   res.end();
 }
