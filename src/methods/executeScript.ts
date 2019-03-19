@@ -1,5 +1,6 @@
 import * as appRoot from 'app-root-path';
 import { asyncExec } from 'async-shelljs';
+import { execFile } from 'child_process';
 import { readdir, stat } from 'fs';
 import { Command } from 'src/command';
 import { promisify } from 'util';
@@ -7,6 +8,7 @@ import { promisify } from 'util';
 const scriptsDirPath = 'externalScripts';
 const readdirAsync = promisify(readdir);
 const statAsync = promisify(stat);
+const execFileAsync = promisify(execFile);
 
 async function fetchScrips(): Promise<{ [name: string]: string }> {
   return readdirAsync(scriptsDirPath).then(async files => {
@@ -53,14 +55,20 @@ const executeScript: Command<
 
   if (!(scriptName in scripts)) throw new Error('no such script');
 
-  const res = asyncExec(
-    `${appRoot.path}/${scripts[scriptName]} ${commandArgs.join(' ')}`,
-    {
-      silent: true,
-    },
-  )
-    .then(res => ({ output: ['\n' + res] }))
-    .catch(e => ({ output: ['\n' + e.message] }));
+  const script = scripts[scriptName];
+  const elems = script.split('.');
+  const extension = elems[elems.length - 1];
+  const executorsMap = {
+    sh: (path: string) => asyncExec(path, { silent: true }),
+    exe: execFileAsync,
+    bat: execFileAsync,
+  };
+  const executor = executorsMap[extension];
+
+  const path = `${appRoot.path}/${script} ${commandArgs.join(' ')}`;
+  const res = executor(path)
+    .then((res: any) => ({ output: ['\n' + res] }))
+    .catch((e: any) => ({ output: ['\n' + e.message] }));
 
   return res;
 };
