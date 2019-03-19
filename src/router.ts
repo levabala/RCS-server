@@ -20,12 +20,12 @@ export async function routerFunction(
   console.log('request:', q.pathname, 'query:', q.query);
 
   const route = routes[q.pathname];
-
+                                                                                
   if (route)
     try {
       const args = Object.values(q.query);
       const output = await route(args);
-      res.writeHead(200, { 'Content-Type': 'application/json ' });
+      res.writeHead(200, { 'Content-Type': 'application/json ', 'Access-Control-Allow-Origin': 'http://159.93.101.156:3000' });
       res.write(JSON.stringify(output));
     } catch (e) {
       res.statusMessage = (e as Error).message;

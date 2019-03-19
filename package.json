@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "dev": "nodemon --exec 'ts-node' ./src/server.ts",
+    "dev": "nodemon --exec ts-node ./src/server.ts",
     "start": "ts-node --fast ./src/server.ts",
     "gitup": "git add ./ & git commit -m 'updates' & git push origin master",
     "update": "git add ./ & git commit -m 'updates' & git push origin master & npm version patch & npm publish",
