@@ -60,14 +60,17 @@ const executeScript: Command<
   const extension = elems[elems.length - 1];
   const executorsMap = {
     sh: (path: string) => asyncExec(path, { silent: true }),
-    exe: execFileAsync,
-    bat: execFileAsync,
+    exe: (path: string) => execFileAsync(path).then(res => res.stdout.split('\r\n')[2]),
+    bat: (path: string) => execFileAsync(path).then(res => res.stdout.split('\r\n')[2]),
   };
   const executor = executorsMap[extension];
 
   const path = `${appRoot.path}/${script} ${commandArgs.join(' ')}`;
   const res = executor(path)
-    .then((res: any) => ({ output: ['\n' + res] }))
+    .then((res: any) => {
+      console.log(res)
+      return { output: ['\n' + res] }
+    })
     .catch((e: any) => ({ output: ['\n' + e.message] }));
 
   return res;
